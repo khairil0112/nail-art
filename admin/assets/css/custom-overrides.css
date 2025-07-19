@@ -1,0 +1,46 @@
+/* Custom override for .bg-primary to set pink color */
+.bg-primary {
+    background-color: #FF4DB8 !important;
+    border-color: #FF4DB8 !important;
+}
+
+/* Custom override for .bg-secondary */
+.bg-secondary {
+    background-color: #D9A7FF !important;
+    border-color: #D9A7FF !important;
+}
+
+/* Custom text colors */
+.text-primary {
+    color: #6B2A5B !important;
+}
+
+.text-secondary {
+    color: #D9A7FF !important;
+}
+
+/* CSS variables for palette */
+:root {
+    --custom-primary: #FF4DB8;
+    --custom-secondary: #D9A7FF;
+    --custom-text: #6B2A5B;
+}
+
+/* Utility classes using CSS variables */
+.text-custom-primary {
+    color: var(--custom-primary) !important;
+}
+
+.text-custom-secondary {
+    color: var(--custom-secondary) !important;
+}
+
+.bg-custom-primary {
+    background-color: var(--custom-primary) !important;
+    border-color: var(--custom-primary) !important;
+}
+
+.bg-custom-secondary {
+    background-color: var(--custom-secondary) !important;
+    border-color: var(--custom-secondary) !important;
+}
