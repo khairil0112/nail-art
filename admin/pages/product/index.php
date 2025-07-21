@@ -107,10 +107,8 @@
                       <li><strong></strong><br><img src="../product/photo/<?= $data['photo']; ?>" alt="Photo" style="width: 100%; max-width: 300px; height: auto;"></li>
                     </ul>
                     <ul class="list-inline">
-                      <li><strong>Type:</strong> <?= $data['type']; ?></li>
-                    </ul>
-                    <ul class="list-inline">
-                      <li><strong>Color:</strong> <?= $data['color']; ?></li>
+                      <li><strong>Type:</strong> <?= $data['type']; ?>
+                      <strong>Color:</strong> <?= $data['color']; ?></li>
                     </ul>
                     <ul class="list-inline">
                       <li>

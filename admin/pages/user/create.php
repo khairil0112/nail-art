@@ -21,15 +21,15 @@
 </head>
 
 <style>
-  input[type=number]::-webkit-inner-spin-button, 
-  input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 
-  input[type=number] {
-    -moz-appearance: textfield;
-  }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
 </style>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -71,12 +71,12 @@
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <form action="create.php" method="post" class="container mt-4">
+                            <form action="create.php" method="post" enctype="multipart/form-data" class="container mt-4">
                                 <!-- ID -->
                                 <div class="form-group row mb-3">
                                     <label for="name" class="col-sm-3 col-form-label text-end">Name</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" placeholder="Input Admin Names" name="name" id="name">
+                                        <input type="text" class="form-control" placeholder="Input Admin Names" name="name" id="name" required>
                                     </div>
                                 </div>
 
@@ -84,26 +84,43 @@
                                 <div class="form-group row mb-3">
                                     <label for="address" class="col-sm-3 col-form-label text-end">Address</label>
                                     <div class="col-sm-6">
-                                        <textarea class="form-control" name="address" id="address" placeholder="Admin Address"></textarea>
+                                        <textarea class="form-control" name="address" id="address" placeholder="Admin Address" required></textarea>
                                     </div>
                                 </div>
 
                                 <!-- Gender -->
                                 <div class="form-group row mb-4">
-                                    <label for="phone" class="col-sm-3 col-form-label text-end">Gender</label>
+                                    <label for="gender" class="col-sm-3 col-form-label text-end">Gender</label>
                                     <div class="col-sm-6">
-                                        <select id="gender" name="gender" class="form-control">
-                                            <option value="" disabled>-- Chose Gender --</option>
+                                        <select id="gender" name="gender" class="form-control" required>
+                                            <option value="" disabled selected>-- Choose Gender --</option>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                         </select>
                                     </div>
                                 </div>
+
                                 <!-- Phone -->
                                 <div class="form-group row mb-4">
                                     <label for="phone" class="col-sm-3 col-form-label text-end">Phone</label>
                                     <div class="col-sm-6">
-                                        <input type="number" class="form-control" placeholder="Input Admin Phones" name="phone" id="phone" >
+                                        <input type="number" class="form-control" placeholder="Input Admin Phones" name="phone" id="phone" required>
+                                    </div>
+                                </div>
+
+                                <!-- Password -->
+                                <div class="form-group row mb-4">
+                                    <label for="password" class="col-sm-3 col-form-label text-end">Password</label>
+                                    <div class="col-sm-6">
+                                        <input type="password" class="form-control" placeholder="Input Password" name="password" id="password" required>
+                                    </div>
+                                </div>
+
+                                <!-- Photo -->
+                                <div class="form-group row mb-4">
+                                    <label for="photo" class="col-sm-3 col-form-label text-end">Photo</label>
+                                    <div class="col-sm-6">
+                                        <input type="file" class="form-control" name="photo" id="photo" accept="image/*" required>
                                     </div>
                                 </div>
 
@@ -118,94 +135,69 @@
 
 
                             <?php
-                            // Check If form submitted, insert form data into users table.
                             if (isset($_POST['submit'])) {
-                                $name = $_POST['name'];
-                                $address = $_POST['address'];
-                                $gender = $_POST['gender'];
-                                $phone = $_POST['phone'];
-                                // memanggil koneksi database
                                 include_once("../koneksi/koneksi.php");
-                                // Membuat query untuk insert data
-                                // var_dump($_POST);
-                                $result = mysqli_query($conn, "INSERT INTO user(name,address,gender,phone) VALUES('$name','$address','$gender','$phone')");
-                                // keterangan jika data berhasil ditambahkan
-                                echo "<script>
-                                    alert('Data berhasil disimpan');
-                                    window.location.href = 'index.php';
-                                </script>";
+
+                                // Validate and sanitize inputs
+                                $name = mysqli_real_escape_string($conn, trim($_POST['name']));
+                                $address = mysqli_real_escape_string($conn, trim($_POST['address']));
+                                $gender = mysqli_real_escape_string($conn, trim($_POST['gender']));
+                                $phone = mysqli_real_escape_string($conn, trim($_POST['phone']));
+                                $password = $_POST['password'];
+
+                                // Hash the password
+                                $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+                                // Handle photo upload
+                                $photo = $_FILES['photo'];
+                                $photo_name = $photo['name'];
+                                $photo_tmp = $photo['tmp_name'];
+                                $photo_size = $photo['size'];
+                                $photo_error = $photo['error'];
+
+                                $upload_dir = '../user/photo/';
+                                if (!is_dir($upload_dir)) {
+                                    mkdir($upload_dir, 0755, true);
+                                }
+
+                                $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+                                $photo_ext = strtolower(pathinfo($photo_name, PATHINFO_EXTENSION));
+
+                                if ($photo_error === 0) {
+                                    if (in_array($photo_ext, $allowed_types)) {
+                                        if ($photo_size <= 5 * 1024 * 1024) { // 5MB max
+                                            $new_photo_name = uniqid('photo_', true) . '.' . $photo_ext;
+                                            $photo_destination = $upload_dir . $new_photo_name;
+                                            if (move_uploaded_file($photo_tmp, $photo_destination)) {
+                                                // Insert data with prepared statement
+                                                $stmt = $conn->prepare("INSERT INTO user (name, address, gender, phone, password, photo) VALUES (?, ?, ?, ?, ?, ?)");
+                                                $stmt->bind_param("ssssss", $name, $address, $gender, $phone, $password_hash, $new_photo_name);
+                                                if ($stmt->execute()) {
+                                                    echo "<script>
+                                                        alert('Data berhasil disimpan');
+                                                        window.location.href = 'index.php';
+                                                    </script>";
+                                                } else {
+                                                    echo "<script>alert('Error: Gagal menyimpan data ke database.');</script>";
+                                                }
+                                                $stmt->close();
+                                            } else {
+                                                echo "<script>alert('Error: Gagal mengupload foto.');</script>";
+                                            }
+                                        } else {
+                                            echo "<script>alert('Error: Ukuran foto terlalu besar. Maksimal 5MB.');</script>";
+                                        }
+                                    } else {
+                                        echo "<script>alert('Error: Format foto tidak didukung.');</script>";
+                                    }
+                                } else {
+                                    echo "<script>alert('Error: Terjadi kesalahan saat mengupload foto.');</script>";
+                                }
                             }
                             ?>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-lg-5">
-          <div class="card">
-            <div class="card-header pb-0 p-3">
-              <h6 class="mb-0">Categories</h6>
-            </div>
-            <div class="card-body p-3">
-              <ul class="list-group">
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex align-items-center">
-                    <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                      <i class="ni ni-mobile-button text-white opacity-10"></i>
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h6 class="mb-1 text-dark text-sm">Devices</h6>
-                      <span class="text-xs">250 in stock, <span class="font-weight-bold">346+ sold</span></span>
-                    </div>
-                  </div>
-                  <div class="d-flex">
-                    <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex align-items-center">
-                    <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                      <i class="ni ni-tag text-white opacity-10"></i>
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h6 class="mb-1 text-dark text-sm">Tickets</h6>
-                      <span class="text-xs">123 closed, <span class="font-weight-bold">15 open</span></span>
-                    </div>
-                  </div>
-                  <div class="d-flex">
-                    <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex align-items-center">
-                    <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                      <i class="ni ni-box-2 text-white opacity-10"></i>
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h6 class="mb-1 text-dark text-sm">Error logs</h6>
-                      <span class="text-xs">1 is active, <span class="font-weight-bold">40 closed</span></span>
-                    </div>
-                  </div>
-                  <div class="d-flex">
-                    <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 border-radius-lg">
-                  <div class="d-flex align-items-center">
-                    <div class="icon icon-shape icon-sm me-3 bg-gradient-dark shadow text-center">
-                      <i class="ni ni-satisfied text-white opacity-10"></i>
-                    </div>
-                    <div class="d-flex flex-column">
-                      <h6 class="mb-1 text-dark text-sm">Happy users</h6>
-                      <span class="text-xs font-weight-bold">+ 430</span>
-                    </div>
-                  </div>
-                  <div class="d-flex">
-                    <button class="btn btn-link btn-icon-only btn-rounded btn-sm text-dark icon-move-right my-auto"><i class="ni ni-bold-right" aria-hidden="true"></i></button>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div> -->
             </div>
 
         </div>

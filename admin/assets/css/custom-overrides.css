@@ -1,6 +1,12 @@
-/* Custom override for .bg-primary to set pink color */
-.bg-primary {
-    background-color: #FF4DB8 !important;
+/* Custom override for sidebar active background color */
+.nav-link.active {
+    background-color: #F7D3EC !important;
+    border-color: #FF4DB8 !important;
+}
+
+.bg-gradient-primary.active,
+.btn.bg-gradient-primary.active {
+    background-color: #F7D3EC !important;
     border-color: #FF4DB8 !important;
 }
 

@@ -108,6 +108,9 @@
                     <!-- Project details-->
 
                     <ul class="list-inline">
+                      <li><strong></strong><br><img src="../user/photo/<?= $data['photo']; ?>" alt="Photo" style="width: 100%; max-width: 300px; height: auto;"></li>
+                    </ul>
+                    <ul class="list-inline">
                       <li><strong>Name:</strong> <?= $data['name']; ?></li>
                     </ul>
                     <ul class="list-inline">

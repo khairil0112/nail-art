@@ -18,7 +18,7 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- CSS Files -->
     <link id="pagestyle" href="../../assets/css/argon-dashboard.css" rel="stylesheet" />
-  <link href="../../assets/css/custom-overrides.css" rel="stylesheet" />
+    <link href="../../assets/css/custom-overrides.css" rel="stylesheet" />
 
 </head>
 
@@ -31,7 +31,7 @@ if (isset($_POST['edit'])) {
     $type = $_POST['type'];
     $color = $_POST['color'];
     $desc = $_POST['desc'];
-    $type_production = $_POST['type_production'];
+    $type_production = isset($_POST['type_production']) ? $_POST['type_production'] : '';
 
     // Handle file upload
     $photo = null;
@@ -142,10 +142,10 @@ $data = mysqli_fetch_array($result);
                                 <div class="form-group row mb-3">
                                     <label for="type_production" class="col-sm-3 col-form-label text-end">Type Production</label>
                                     <div class="col-sm-6">
-                                        <select id="type_production" name="type_production" class="form-control" required disabled>
-                                            <option value="booking" <?= $data['type_production'] == 'booking' ? 'selected' : ''; ?>>Booking</option>
-                                            <option value="pre-order" <?= $data['type_production'] == 'pre-order' ? 'selected' : ''; ?>>Pre-order</option>
-                                        </select>
+                                    <select id="type_production" name="type_production" class="form-control" required>
+                                        <option value="pre-order" <?= $data['type_production'] == 'pre-order' ? 'selected' : ''; ?>>Pre-order</option>
+                                        <option value="booking" <?= $data['type_production'] == 'booking' ? 'selected' : ''; ?>>Booking</option>
+                                    </select>
                                     </div>
                                 </div>
 
@@ -184,11 +184,11 @@ $data = mysqli_fetch_array($result);
 
 </html>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const typeSelect = document.getElementById('type');
         const typeProductionSelect = document.getElementById('type_production');
 
-        typeSelect.addEventListener('change', function () {
+        typeSelect.addEventListener('change', function() {
             if (typeSelect.value === 'press-on') {
                 typeProductionSelect.value = 'pre-order';
             } else if (typeSelect.value === 'nail-art') {
