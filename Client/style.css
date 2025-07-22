@@ -632,3 +632,11 @@ h1,h2,h3,h4,h5,h6 {
     height: 740px;
   }
 }
+
+/* Blog description full display fix */
+.category-carousel .category-item h4 {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-height: none !important;
+}

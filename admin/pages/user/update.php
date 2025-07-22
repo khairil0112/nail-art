@@ -29,14 +29,52 @@ if (isset($_POST['edit'])) {
     $address = $_POST['address'];
     $gender = $_POST['gender'];
     $phone = $_POST['phone'];
+    $password = trim($_POST['password'] ?? '');
 
-    // Use prepared statement for update
-    $stmt = $conn->prepare("UPDATE user SET name = ?, gender = ?, address = ?, phone = ? WHERE id = ?");
-    $stmt->bind_param("ssssi", $name, $gender, $address, $phone, $id);
-    $stmt->execute();
+    $photo = null;
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
+        $uploadDir = '../user/photo/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        $fileTmpPath = $_FILES['photo']['tmp_name'];
+        $fileName = basename($_FILES['photo']['name']);
+        $fileNameCmps = explode(".", $fileName);
+        $fileExtension = strtolower(end($fileNameCmps));
+        $newFileName = uniqid('photo_', true) . '.' . $fileExtension;
+        $destPath = $uploadDir . $newFileName;
+
+        if (move_uploaded_file($fileTmpPath, $destPath)) {
+            $photo = $newFileName;
+        } else {
+            echo "<script>alert('Error uploading photo.');</script>";
+        }
+    }
+
+    if ($password !== '') {
+        $password_hash = md5($password);
+    }
+
+    if ($photo && $password !== '') {
+        $stmt = $conn->prepare("UPDATE user SET name = ?, gender = ?, address = ?, phone = ?, password = ?, photo = ? WHERE id = ?");
+        $stmt->bind_param("ssssssi", $name, $gender, $address, $phone, $password_hash, $photo, $id);
+    } elseif ($photo) {
+        $stmt = $conn->prepare("UPDATE user SET name = ?, gender = ?, address = ?, phone = ?, photo = ? WHERE id = ?");
+        $stmt->bind_param("sssssi", $name, $gender, $address, $phone, $photo, $id);
+    } elseif ($password !== '') {
+        $stmt = $conn->prepare("UPDATE user SET name = ?, gender = ?, address = ?, phone = ?, password = ? WHERE id = ?");
+        $stmt->bind_param("sssssi", $name, $gender, $address, $phone, $password_hash, $id);
+    } else {
+        $stmt = $conn->prepare("UPDATE user SET name = ?, gender = ?, address = ?, phone = ? WHERE id = ?");
+        $stmt->bind_param("ssssi", $name, $gender, $address, $phone, $id);
+    }
+
+    if ($stmt->execute()) {
+        echo '<script>alert("Update Successfully");window.location="index.php"</script>';
+    } else {
+        echo '<script>alert("Update Failed: ' . $stmt->error . '");</script>';
+    }
     $stmt->close();
-
-    echo '<script>alert("Update Successfully");window.location="index.php"</script>';
 }
 
 ?>
@@ -104,20 +142,20 @@ if ($data) {
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <form action="" method="post" class="container mt-4">
+                            <form action="" method="post" enctype="multipart/form-data" class="container mt-4">
                                 <input type="hidden" name="id" value="<?php echo $id ?>">
 
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-3 col-form-label text-right">Name</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="name" value="<?php echo $name ?>">
+                                        <input type="text" class="form-control" name="name" value="<?php echo $name ?>" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="gender" class="col-sm-3 col-form-label text-right">Gender</label>
                                     <div class="col-sm-6">
-                                        <select id="gender" name="gender" class="form-control">
+                                        <select id="gender" name="gender" class="form-control" required>
                                             <?php
                                             $genders = ['Male', 'Female', 'Other'];
                                             foreach ($genders as $gen) {
@@ -130,16 +168,31 @@ if ($data) {
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label text-right">Address</label>
+                                    <label for="address" class="col-sm-3 col-form-label text-right">Address</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="address" value="<?php echo $address ?>">
+                                        <input type="text" class="form-control" name="address" value="<?php echo $address ?>" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label text-right">Phone</label>
+                                    <label for="phone" class="col-sm-3 col-form-label text-right">Phone</label>
                                     <div class="col-sm-6">
-                                        <input type="number" class="form-control" name="phone" value="<?php echo $phone ?>">
+                                        <input type="text" class="form-control" name="phone" value="<?php echo $phone ?>" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="password" class="col-sm-3 col-form-label text-right">Password</label>
+                                    <div class="col-sm-6">
+                                        <input type="password" class="form-control" name="password" placeholder="Kosongkan jika tidak ingin mengubah password">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="photo" class="col-sm-3 col-form-label text-right">Photo</label>
+                                    <div class="col-sm-6">
+                                        <img id="photoPreview" src="../user/photo/<?php echo htmlspecialchars($photo ?? '') ?>" alt="Photo Preview" style="max-width: 50%; max-height:50%; margin-top: 10px; border-radius: 5px; <?php echo empty($photo) ? 'display:none;' : '' ?>" />
+                                        <input type="file" class="form-control" name="photo" accept="image/*" onchange="previewPhoto(event)">
                                     </div>
                                 </div>
 
@@ -149,7 +202,24 @@ if ($data) {
                                         <button type="submit" name="edit" class="btn btn-primary">Submit</button>
                                     </div>
                                 </div>
-                            </form>
+</form>
+<script>
+    function previewPhoto(event) {
+        const input = event.target;
+        const preview = document.getElementById('photoPreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '#';
+            preview.style.display = 'none';
+        }
+    }
+</script>
 
                         </div>
                     </div>

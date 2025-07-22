@@ -7,7 +7,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <title>
-    Argon Dashboard 3 by Creative Tim
+    User Data | Admin Panelm
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -27,6 +27,11 @@
 <body class="g-sidenav-show   bg-gray-100">
     <div class="min-height-300 bg-primary position-absolute w-100"></div>
   <?php
+   session_start();
+  if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+      header("Location: ../auth/login.php");
+      exit();
+  }
   include_once("../aside/aside.php");
   include_once("../koneksi/koneksi.php");
   $result = mysqli_query($conn, "SELECT * FROM user");

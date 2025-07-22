@@ -153,9 +153,11 @@ $data = mysqli_fetch_array($result);
                                 <div class="form-group row mb-3">
                                     <label for="photo" class="col-sm-3 col-form-label text-end">Photo</label>
                                     <div class="col-sm-6">
-                                        <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
+                                        <input type="file" class="form-control" name="photo" id="photo" accept="image/*" onchange="previewPhoto(event)">
                                         <?php if (!empty($data['photo'])): ?>
-                                            <img src="../product/photo/<?= $data['photo']; ?>" alt="Current Photo" style="width: 100px; height: auto; margin-top: 10px;">
+                                            <img src="../product/photo/<?= $data['photo']; ?>" alt="Current Photo" style="width: 100px; height: auto; margin-top: 10px;" id="photoPreview">
+                                        <?php else: ?>
+                                            <img id="photoPreview" src="#" alt="Photo Preview" style="display:none; max-width: 100%; margin-top: 10px; border-radius: 5px;" />
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -180,6 +182,23 @@ $data = mysqli_fetch_array($result);
     <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/chartjs.min.js"></script>
     <script src="../assets/js/argon-dashboard.min.js?v=2.1.0"></script>
+<script>
+    function previewPhoto(event) {
+        const input = event.target;
+        const preview = document.getElementById('photoPreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '#';
+            preview.style.display = 'none';
+        }
+    }
+</script>
 </body>
 
 </html>

@@ -1,4 +1,9 @@
 <?php
+ session_start();
+  if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+      header("Location: ../auth/login.php");
+      exit();
+  }
 include_once("../koneksi/koneksi.php");
 
 // Use prepared statement for security
@@ -35,21 +40,7 @@ $result = $stmt->get_result();
 
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
-      <div class="container-fluid py-1 px-3">
-        <nav aria-label="breadcrumb">
-          <h6 class="font-weight-bolder mb-0">Contact Data</h6>
-        </nav>
-        <ul class="navbar-nav justify-content-end">
-          <li class="nav-item d-flex align-items-center">
-            <a href="../../index.html" class="nav-link text-body font-weight-bold px-0">
-              <i class="fa fa-user me-sm-1"></i>
-              <span class="d-sm-inline d-none">Home</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <?php include_once("../nav/navbar.php"); ?>
     <!-- End Navbar -->
 
     <div class="container-fluid py-4">
@@ -58,18 +49,17 @@ $result = $stmt->get_result();
           <div class="card mb-4">
             <div class="card-header pb-0 d-flex justify-content-between align-items-center">
               <h6>Contact List</h6>
-              <a href="add.php" class="btn btn-primary btn-sm">Tambah Data</a>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-3">
                 <table id="contactTable" class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Username</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Phone</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Subject</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Aksi</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder opacity-7">No</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder opacity-7 ps-2">Username</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder opacity-7 ps-2">Phone</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder opacity-7 ps-2">Subject</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder opacity-7 ps-2">Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -94,7 +84,6 @@ $result = $stmt->get_result();
       </div>
 
       <?php
-      // Reset result pointer for modal generation
       $result->data_seek(0);
       while ($data = $result->fetch_assoc()) {
       ?>
@@ -123,23 +112,6 @@ $result = $stmt->get_result();
       }
       ?>
 
-      <footer class="footer pt-3  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                ©
-                <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                made with <i class="fa fa-heart"></i> by
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
-                for a better web.
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   </main>
 

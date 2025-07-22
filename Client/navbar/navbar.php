@@ -32,7 +32,7 @@
   <div class="container-fluid">
     
     <!-- Logo kiri -->
-    <a class="navbar-brand d-flex align-items-center" href="#">
+    <a class="navbar-brand d-flex align-items-center" href="#home">
       <img src="../images/nail-art.png" alt="logo" style="width: 100px; height: auto;" class="me-2">
       <span style="font-weight: bold; font-size: 20px;"></span>
     </a>

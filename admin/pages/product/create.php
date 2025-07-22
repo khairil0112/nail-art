@@ -100,7 +100,8 @@
                                 <div class="form-group row mb-3">
                                     <label for="photo" class="col-sm-3 col-form-label text-end">Photo</label>
                                     <div class="col-sm-6">
-                                        <input type="file" class="form-control" name="photo" id="photo" accept="image/*" required>
+                                        <input type="file" class="form-control" name="photo" id="photo" accept="image/*" required onchange="previewPhoto(event)">
+                                        <img id="photoPreview" src="#" alt="Photo Preview" class="mb-3" style="display:none; max-width: 50%; margin-top: 10px; border-radius: 5px;" />
                                     </div>
                                 </div>
 
@@ -189,6 +190,23 @@
             });
         });
     </script>
+<script>
+    function previewPhoto(event) {
+        const input = event.target;
+        const preview = document.getElementById('photoPreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '#';
+            preview.style.display = 'none';
+        }
+    }
+</script>
 </body>
 
 </html>

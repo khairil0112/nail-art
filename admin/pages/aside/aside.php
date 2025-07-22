@@ -57,6 +57,18 @@ $current_page = basename($_SERVER['PHP_SELF']);
           <span class="nav-link-text ms-1">Contact</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link <?php if (($current_page == 'edit.php' || $current_page == 'index.php') && strpos($_SERVER['REQUEST_URI'], '/blog/') !== false) echo 'active'; ?>" href="/nail-art/admin/pages/blog/index.php">
+          <div class="icon icon-shape icon-md text-center me-2 d-flex align-items-center justify-content-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M4 4H20V20H4V4Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M4 9H20" stroke="currentColor" stroke-width="2"/>
+              <path d="M9 20V9" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <span class="nav-link-text ms-1">Blog</span>
+        </a>
+      </li>
     </ul>
   </div>
 </aside>

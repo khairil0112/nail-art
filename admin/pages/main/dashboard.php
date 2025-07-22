@@ -29,7 +29,12 @@
 
 <body class="g-sidenav-show bg-gray-100">
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
-  <?php
+<?php
+  session_start();
+  if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+      header("Location: ../auth/login.php");
+      exit();
+  }
   include_once("../aside/aside.php");
   include_once("../koneksi/koneksi.php");
 

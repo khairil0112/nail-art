@@ -203,7 +203,7 @@ $newest_product = mysqli_fetch_array($newest)
     </div>
   </section>
 
-  <section class="py-5">
+  <section class="py-5" id="product">
     <div class="container-fluid">
 
       <div class="row">

@@ -120,7 +120,8 @@
                                 <div class="form-group row mb-4">
                                     <label for="photo" class="col-sm-3 col-form-label text-end">Photo</label>
                                     <div class="col-sm-6">
-                                        <input type="file" class="form-control" name="photo" id="photo" accept="image/*" required>
+                                        <input type="file" class="form-control" name="photo" id="photo" accept="image/*" required onchange="previewPhoto(event)">
+                                        <img id="photoPreview" src="#" alt="Photo Preview" class="mb-3" style="display:none; max-width: 50%; margin-top: 10px; border-radius: 5px;" />
                                     </div>
                                 </div>
 
@@ -143,55 +144,59 @@
                                 $address = mysqli_real_escape_string($conn, trim($_POST['address']));
                                 $gender = mysqli_real_escape_string($conn, trim($_POST['gender']));
                                 $phone = mysqli_real_escape_string($conn, trim($_POST['phone']));
-                                $password = $_POST['password'];
+                                $password = trim($_POST['password']);
 
-                                // Hash the password
-                                $password_hash = password_hash($password, PASSWORD_DEFAULT);
+                                $error = '';
 
-                                // Handle photo upload
-                                $photo = $_FILES['photo'];
-                                $photo_name = $photo['name'];
-                                $photo_tmp = $photo['tmp_name'];
-                                $photo_size = $photo['size'];
-                                $photo_error = $photo['error'];
+                                if ($name === '' || $address === '' || $gender === '' || $phone === '' || $password === '') {
+                                    $error = "Please fill in all required fields.";
+                                } else {
+                                    $password_hash = md5($password);
 
-                                $upload_dir = '../user/photo/';
-                                if (!is_dir($upload_dir)) {
-                                    mkdir($upload_dir, 0755, true);
-                                }
+                                    // Handle photo upload
+                                    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
+                                        $photo = $_FILES['photo'];
+                                        $photo_name = $photo['name'];
+                                        $photo_tmp = $photo['tmp_name'];
+                                        $photo_size = $photo['size'];
 
-                                $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-                                $photo_ext = strtolower(pathinfo($photo_name, PATHINFO_EXTENSION));
+                                        $upload_dir = '../user/photo/';
+                                        if (!is_dir($upload_dir)) {
+                                            mkdir($upload_dir, 0755, true);
+                                        }
 
-                                if ($photo_error === 0) {
-                                    if (in_array($photo_ext, $allowed_types)) {
-                                        if ($photo_size <= 5 * 1024 * 1024) { // 5MB max
-                                            $new_photo_name = uniqid('photo_', true) . '.' . $photo_ext;
-                                            $photo_destination = $upload_dir . $new_photo_name;
-                                            if (move_uploaded_file($photo_tmp, $photo_destination)) {
-                                                // Insert data with prepared statement
-                                                $stmt = $conn->prepare("INSERT INTO user (name, address, gender, phone, password, photo) VALUES (?, ?, ?, ?, ?, ?)");
-                                                $stmt->bind_param("ssssss", $name, $address, $gender, $phone, $password_hash, $new_photo_name);
-                                                if ($stmt->execute()) {
-                                                    echo "<script>
-                                                        alert('Data berhasil disimpan');
-                                                        window.location.href = 'index.php';
-                                                    </script>";
+                                        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+                                        $photo_ext = strtolower(pathinfo($photo_name, PATHINFO_EXTENSION));
+
+                                        if (in_array($photo_ext, $allowed_types)) {
+                                            if ($photo_size <= 10 * 1024 * 1024) { // 5MB max
+                                                $new_photo_name = uniqid('photo_', true) . '.' . $photo_ext;
+                                                $photo_destination = $upload_dir . $new_photo_name;
+                                                if (move_uploaded_file($photo_tmp, $photo_destination)) {
+                                                    // Insert data with prepared statement
+                                                    $stmt = $conn->prepare("INSERT INTO user (name, address, gender, phone, password, photo) VALUES (?, ?, ?, ?, ?, ?)");
+                                                    $stmt->bind_param("ssssss", $name, $address, $gender, $phone, $password_hash, $new_photo_name);
+                                                    if ($stmt->execute()) {
+                                                        echo "<script>
+                                                            alert('Data berhasil disimpan');
+                                                            window.location.href = 'index.php';
+                                                        </script>";
+                                                    } else {
+                                                        echo "<script>alert('Error: Gagal menyimpan data ke database.');</script>";
+                                                    }
+                                                    $stmt->close();
                                                 } else {
-                                                    echo "<script>alert('Error: Gagal menyimpan data ke database.');</script>";
+                                                    echo "<script>alert('Error: Gagal mengupload foto.');</script>";
                                                 }
-                                                $stmt->close();
                                             } else {
-                                                echo "<script>alert('Error: Gagal mengupload foto.');</script>";
+                                                echo "<script>alert('Error: Ukuran foto terlalu besar. Maksimal 5MB.');</script>";
                                             }
                                         } else {
-                                            echo "<script>alert('Error: Ukuran foto terlalu besar. Maksimal 5MB.');</script>";
+                                            echo "<script>alert('Error: Format foto tidak didukung.');</script>";
                                         }
                                     } else {
-                                        echo "<script>alert('Error: Format foto tidak didukung.');</script>";
+                                        echo "<script>alert('Error: Terjadi kesalahan saat mengupload foto.');</script>";
                                     }
-                                } else {
-                                    echo "<script>alert('Error: Terjadi kesalahan saat mengupload foto.');</script>";
                                 }
                             }
                             ?>
@@ -376,6 +381,23 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/argon-dashboard.min.js?v=2.1.0"></script>
+<script>
+    function previewPhoto(event) {
+        const input = event.target;
+        const preview = document.getElementById('photoPreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '#';
+            preview.style.display = 'none';
+        }
+    }
+</script>
 </body>
 
 </html>

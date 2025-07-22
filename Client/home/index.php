@@ -141,7 +141,7 @@
     <?php include_once("../navbar/navbar.php"); ?>
   </header>
 
-  <section class="py-3" style="background-image: url('images/background-pattern.jpg');background-repeat: no-repeat;background-size: cover;">
+  <section class="py-3" style="background-image: url('images/background-pattern.jpg');background-repeat: no-repeat;background-size: cover;" id="home">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -156,10 +156,10 @@
                   <div class="swiper-slide">
                     <div class="row banner-content p-5">
                       <div class="content-wrapper col-md-7">
-                        <div class="categories my-3">100% natural</div>
-                        <h3 class="display-4">Fresh Smoothie & Summer Juice</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim massa diam elementum.</p>
-                        <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1 px-4 py-3 mt-3">Shop Now</a>
+                        <div class="categories my-3">100% color</div>
+                        <h3 class="display-4">Selamat datang </h3>
+                        <p>di dunia nail art yang penuh warna! Temukan inspirasi desain kuku terbaru, tutorial mudah untuk pemula, hingga tips dan trik perawatan kuku agar selalu sehat dan cantik. Jadikan jari-jemarimu kanvas ekspresi tanpa batas!</p>
+                        <a href="../product/index.php#product" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1 px-4 py-3 mt-3">Shop Now</a>
                       </div>
                       <div class="img-wrapper col-md-5">
                         <img src="images/product-thumb-1.png" class="img-fluid">
@@ -167,33 +167,6 @@
                     </div>
                   </div>
 
-                  <div class="swiper-slide">
-                    <div class="row banner-content p-5">
-                      <div class="content-wrapper col-md-7">
-                        <div class="categories mb-3 pb-3">100% natural</div>
-                        <h3 class="banner-title">Fresh Smoothie & Summer Juice</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim massa diam elementum.</p>
-                        <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">Shop Collection</a>
-                      </div>
-                      <div class="img-wrapper col-md-5">
-                        <img src="images/product-thumb-1.png" class="img-fluid">
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="swiper-slide">
-                    <div class="row banner-content p-5">
-                      <div class="content-wrapper col-md-7">
-                        <div class="categories mb-3 pb-3">100% natural</div>
-                        <h3 class="banner-title">Heinz Tomato Ketchup</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim massa diam elementum.</p>
-                        <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">Shop Collection</a>
-                      </div>
-                      <div class="img-wrapper col-md-5">
-                        <img src="images/product-thumb-2.png" class="img-fluid">
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 <div class="swiper-pagination"></div>
@@ -205,9 +178,10 @@
               <div class="row banner-content p-5">
 
                 <div class="content-wrapper col-md-7">
-                  <div class="categories sale mb-3 pb-3">20% off</div>
-                  <h3 class="banner-title">Fruits & Vegetables</h3>
-                  <a href="#" class="d-flex align-items-center nav-link">Shop Collection <svg width="24" height="24">
+                  <h3 class="banner-title">Lepaskan kreativitasmu lewat nail art!</h3>
+                  <p>Di sini, kami merayakan setiap goresan kuas dan kilau kuteks. </p>
+
+                  <a href="../product/index.php#product" class="d-flex align-items-center nav-link">Shop Collection <svg width="24" height="24">
                       <use xlink:href="#arrow-right"></use>
                     </svg></a>
                 </div>
@@ -219,9 +193,8 @@
               <div class="row banner-content p-5">
 
                 <div class="content-wrapper col-md-7">
-                  <div class="categories sale mb-3 pb-3">15% off</div>
                   <h3 class="item-title">Baked Products</h3>
-                  <a href="#" class="d-flex align-items-center nav-link">Shop Collection <svg width="24" height="24">
+                  <a href="../product/index.php#product" class="d-flex align-items-center nav-link">Shop Collection <svg width="24" height="24">
                       <use xlink:href="#arrow-right"></use>
                     </svg></a>
                 </div>
@@ -284,16 +257,23 @@
           <div class="col-md-4">
             <article class="post-item card border-0 shadow-sm p-3">
               <div class="image-holder zoom-effect">
-                <img src="../../admin/pages/user/photo/<?php echo $user['photo'] ?>" alt="post" class="card-img-top">
+                <img src="../../admin/pages/user/photo/<?php echo $user['photo'] ?>" alt="post" class="card-img-top rounded-3" style="max-width: 40%;">
               </div>
               <div class="card-body">
                 <div class="post-header">
                   <h3 class="post-title">
-                    <a href="#" class="text-decoration-none"><?php echo $user['name'] ?></a>
+                      <?php echo $user['name'] ?>
                   </h3>
                   <p><?php echo $user['address'] ?></p>
                   <p>
                     <a href="http://wa.me/62<?php echo $user['phone'] ?>" class="btn btn-outline-success"><?php echo $user['phone'] ?></a>
+                    <a href="#" class="text-decoration-none btn btn-info" data-bs-toggle="modal" data-bs-target="#teamModal"
+                       data-name="<?php echo htmlspecialchars($user['name']); ?>"
+                       data-photo="../../admin/pages/user/photo/<?php echo htmlspecialchars($user['photo']); ?>"
+                       data-address="<?php echo htmlspecialchars($user['address']); ?>"
+                       data-phone="<?php echo htmlspecialchars($user['phone']); ?>">
+                       Detail
+                      </a>
                   </p>
                 </div>
               </div>
@@ -303,6 +283,54 @@
       </div>
     </div>
   </section>
+
+  <!-- Modal -->
+  <div class="modal fade" id="teamModal" tabindex="-1" aria-labelledby="teamModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="teamModalLabel">Team Member Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-flex flex-column flex-md-row align-items-center gap-4">
+          <img id="modalPhoto" src="" alt="Team Member Photo" class="rounded-3" style="max-width: 200px; object-fit: cover;">
+          <div>
+            <h3 id="modalName"></h3>
+            <p id="modalAddress"></p>
+            <a id="modalPhone" href="#" class="btn btn-outline-success" target="_blank"></a>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var teamModal = document.getElementById('teamModal');
+    teamModal.addEventListener('show.bs.modal', function (event) {
+      var trigger = event.relatedTarget;
+      var name = trigger.getAttribute('data-name');
+      var photo = trigger.getAttribute('data-photo');
+      var address = trigger.getAttribute('data-address');
+      var phone = trigger.getAttribute('data-phone');
+
+      var modalTitle = teamModal.querySelector('.modal-title');
+      var modalPhoto = teamModal.querySelector('#modalPhoto');
+      var modalName = teamModal.querySelector('#modalName');
+      var modalAddress = teamModal.querySelector('#modalAddress');
+      var modalPhone = teamModal.querySelector('#modalPhone');
+
+      modalTitle.textContent = 'Team Member Details - ' + name;
+      modalPhoto.src = photo;
+      modalPhoto.alt = name;
+      modalName.textContent = name;
+      modalAddress.textContent = address;
+      modalPhone.textContent = phone;
+      modalPhone.href = 'http://wa.me/62' + phone;
+    });
+  </script>
 
   <section class="py-5" id="contact">
     <?php
@@ -341,7 +369,7 @@
               <div class="section-header">
                 <h2 class="section-title display-4">Get <span class="text-primary">25% Discount</span> on your first purchase</h2>
               </div>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dictumst amet, metus, sit massa posuere maecenas. At tellus ut nunc amet vel egestas.</p>
+              <p>Setiap ulasan yang anda berikan akan selalu membuat kami menjadi lebih baik</p>
             </div>
             <div class="col-md-6 p-5">
               <form method="post" action="">
@@ -372,7 +400,7 @@
                   </div>
                 </div>
                 <div class="d-grid gap-2">
-                  <input type="submit" name="submit" value="submit" class="btn btn-dark btn-xl text-uppercase"> 
+                  <input type="submit" name="submit" value="submit" class="btn btn-dark btn-xl text-uppercase">
 
                 </div>
               </form>
@@ -645,6 +673,7 @@
       </div>
     </div>
   </footer>
+
   <div id="footer-bottom">
     <div class="container-fluid">
       <div class="row">
