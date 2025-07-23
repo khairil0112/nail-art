@@ -25,12 +25,12 @@
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
-    <div class="min-height-300 bg-primary position-absolute w-100"></div>
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
   <?php
-   session_start();
+  session_start();
   if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
-      header("Location: ../auth/login.php");
-      exit();
+    header("Location: ../auth/login.php");
+    exit();
   }
   include_once("../aside/aside.php");
   include_once("../koneksi/koneksi.php");
@@ -61,18 +61,29 @@
                   </tr>
                 </thead>
                 <?php
-                // untuk mengulang data sebanyak data yang ada di tabel mahasiswa
                 while ($user_data = mysqli_fetch_array($result)) {
                   echo "<tr>";
-                  echo "<td>" . $user_data['id'] . "</td>";
-                  echo "<td>" . $user_data['subject'] . "</td>";
-                  echo "<td>" . $user_data['description'] . "</td>";
+                  echo "<td>" . htmlspecialchars($user_data['id']) . "</td>";
+                  echo "<td>" . htmlspecialchars($user_data['subject']) . "</td>";
+                  echo "<td>";
+
+                  $description = $user_data['description'];
+                  $character_limit = 50;
+
+                  if (mb_strlen($description, 'UTF-8') > $character_limit) {
+                    echo htmlspecialchars(mb_substr($description, 0, $character_limit, 'UTF-8')) . "...";
+                  } else {
+                    echo htmlspecialchars($description);
+                  }
+
+                  echo "</td>";
                   echo "<td>
-                  <a href = 'edit.php?id=$user_data[id]' class='btn btn-success btn-sm'  style='margin : 5px'>Update</a>
-                  <a data-bs-toggle='modal' href='#portfolioModal{$user_data['id']}' class='btn btn-info btn-sm' style='margin : 5px'>Detail</a>
-                  </td>";
+    <a href = 'edit.php?id=" . htmlspecialchars($user_data['id']) . "' class='btn btn-success btn-sm' style='margin : 5px'>Update</a>
+    <a data-bs-toggle='modal' href='#portfolioModal" . htmlspecialchars($user_data['id']) . "' class='btn btn-info btn-sm' style='margin : 5px'>Detail</a>
+    </td>";
                   echo "</tr>";
                 }
+                ?>
 
                 ?>
               </table>
@@ -109,14 +120,14 @@
                       <li><strong>description:</strong> <?= $data['description']; ?></li>
                     </ul>
                   </div>
-                  
+
                 </div>
               </div>
               <div class="d-flex justify-content-end">
-                      <button class="btn btn-primary btn-sm text-uppercase" data-bs-dismiss="modal" type="button">
-                        Close
-                      </button>
-                    </div>
+                <button class="btn btn-primary btn-sm text-uppercase" data-bs-dismiss="modal" type="button">
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>

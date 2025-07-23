@@ -230,12 +230,12 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12">
-          <div class="category-carousel swiper">
-            <div class="swiper-wrapper">
-              <a href="" class="nav-link category-item swiper-slide">
+        <div class="col-md-12 ">
+          <div class="category-carousel swiper ">
+            <div class="swiper-wrapper ">
+              <a href="" class="nav-link category-item swiper-slide bg-primary">
                 <h1 class="text-uppercase"><?php echo $blog['subject'] ?></h1>
-                <h4 class="text-primary"><?php echo $blog['description'] ?></h4>
+                <h4 class="text-secondary"><?php echo $blog['description'] ?></h4>
               </a>
             </div>
           </div>
