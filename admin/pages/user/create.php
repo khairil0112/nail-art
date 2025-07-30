@@ -139,7 +139,6 @@
                             if (isset($_POST['submit'])) {
                                 include_once("../koneksi/koneksi.php");
 
-                                // Validate and sanitize inputs
                                 $name = mysqli_real_escape_string($conn, trim($_POST['name']));
                                 $address = mysqli_real_escape_string($conn, trim($_POST['address']));
                                 $gender = mysqli_real_escape_string($conn, trim($_POST['gender']));
@@ -153,7 +152,7 @@
                                 } else {
                                     $password_hash = md5($password);
 
-                                    // Handle photo upload
+                                    // untuk lokasi photo upload
                                     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
                                         $photo = $_FILES['photo'];
                                         $photo_name = $photo['name'];

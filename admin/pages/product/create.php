@@ -88,7 +88,7 @@
                                 <div class="form-group row mb-3">
                                     <label for="type_production" class="col-sm-3 col-form-label text-end">Type Production</label>
                                     <div class="col-sm-6">
-                                        <select id="type_production" name="type_production" class="form-control" required disabled>
+                                        <select id="type_production" name="type_production" class="form-control" required>
                                             <option value="" disabled selected>-- Type time Production --</option>
                                             <option value="booking">Booking</option>
                                             <option value="pre-order">Pre-order</option>

@@ -29,7 +29,6 @@ include_once("../koneksi/koneksi.php");
 $result = mysqli_query($conn, "SELECT * FROM product");
 
 $newest = mysqli_query($conn, "SELECT * FROM product ORDER BY id DESC LIMIT 1");
-$newest_product = mysqli_fetch_array($newest)
 ?>
 
 <body>
@@ -164,6 +163,7 @@ $newest_product = mysqli_fetch_array($newest)
         </div>
       </div>
       <div class="row">
+        <?php while ($newest_product = mysqli_fetch_array($newest)) { ?>
         <div class="col-md-12">
 
           <div class="brand-carousel swiper">
@@ -180,6 +180,7 @@ $newest_product = mysqli_fetch_array($newest)
                         <h4 class="text-dark mb-0 text-uppercase"><?php echo $newest_product['name'] ?></h4>
                         <h5 class="card-title"><?php echo $newest_product['type'] ?></h5>
                       </div>
+                      
                       <div class="d-flex align-items-center justify-content-start">
                           <a href="#" class="btn btn-info text-light" data-bs-toggle="modal" data-bs-target="#portfolioModal<?php echo $newest_product['id']; ?>"
                             data-name="<?php echo htmlspecialchars($newest_product['name']); ?>"
@@ -199,6 +200,7 @@ $newest_product = mysqli_fetch_array($newest)
           </div>
 
         </div>
+        <?php } ?>
       </div>
     </div>
   </section>

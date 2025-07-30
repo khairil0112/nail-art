@@ -23,7 +23,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
 </head>
+ <?php
+  include_once("../koneksi/koneksi.php");
+  $result_blog = mysqli_query($conn, "SELECT * FROM blog");
+  $blog = mysqli_fetch_array($result_blog);
 
+  $result_user = mysqli_query($conn, "SELECT * FROM user");
+
+  ?>
 <body>
 
 
@@ -141,18 +148,14 @@
     <?php include_once("../navbar/navbar.php"); ?>
   </header>
 
-  <section class="py-3" style="background-image: url('images/background-pattern.jpg');background-repeat: no-repeat;background-size: cover;" id="home">
+  <section class="py-3" style="background-image: url('images/background-pattern.jpg');background-repeat: no-repeat;background-size: cover;">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-
           <div class="banner-blocks">
-
             <div class="banner-ad large bg-info block-1">
-
               <div class="swiper main-swiper">
                 <div class="swiper-wrapper">
-
                   <div class="swiper-slide">
                     <div class="row banner-content p-5">
                       <div class="content-wrapper col-md-7">
@@ -166,11 +169,8 @@
                       </div>
                     </div>
                   </div>
-
                 </div>
-
                 <div class="swiper-pagination"></div>
-
               </div>
             </div>
 
@@ -210,15 +210,8 @@
     </div>
   </section>
 
-  <?php
-  include_once("../koneksi/koneksi.php");
-  $result_blog = mysqli_query($conn, "SELECT * FROM blog");
-  $blog = mysqli_fetch_array($result_blog);
-
-  $result_user = mysqli_query($conn, "SELECT * FROM user");
-
-  ?>
-  <section class="py-5 overflow-hidden" id="Home">
+ 
+  <section class="py-5 overflow-hidden" id="home">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">

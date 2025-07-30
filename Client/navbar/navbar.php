@@ -1,66 +1,67 @@
 <div class="container-fluid">
   <div class="row py-3 border-bottom">
 
-<!-- Pastikan Bootstrap sudah di-include -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Pastikan Bootstrap sudah di-include -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Animasi Warna -->
-<style>
-  .nav-link {
-    color: #333;
-    transition: color 0.3s ease, background-color 0.3s ease, border-bottom 0.3s ease;
-    padding: 6px 12px;
-    border-radius: 5px;
-    position: relative;
-  }
+    <!-- Animasi Warna -->
+    <style>
+      .nav-link {
+        color: #333;
+        transition: color 0.3s ease, background-color 0.3s ease, border-bottom 0.3s ease;
+        padding: 6px 12px;
+        border-radius: 5px;
+        position: relative;
+      }
 
-  .nav-link:hover {
-    color: #fff;
-    background-color: #00d9ffff; /* Warna biru saat hover */
-    text-decoration: none;
-  }
+      .nav-link:hover {
+        color: #fff;
+        background-color: #00d9ffff;
+        /* Warna biru saat hover */
+        text-decoration: none;
+      }
 
-  .nav-link.active {
-    font-weight: bold;
-    color: #007bff;
-  }
-</style>
+      .nav-link.active {
+        font-weight: bold;
+        color: #007bff;
+      }
+    </style>
 
-<!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm px-4">
-  <div class="container-fluid">
-    
-    <!-- Logo kiri -->
-    <a class="navbar-brand d-flex align-items-center" href="#home">
-      <img src="../images/nail-art.png" alt="logo" style="width: 100px; height: auto;" class="me-2">
-      <span style="font-weight: bold; font-size: 20px;"></span>
-    </a>
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm px-4">
+      <div class="container-fluid">
 
-    <!-- Toggle button (mobile) -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+        <!-- Logo kiri -->
+        <a class="navbar-brand d-flex align-items-center" href="#home">
+          <img src="../images/nail-art.png" alt="logo" style="width: 100px; height: auto;" class="me-2">
+          <span style="font-weight: bold; font-size: 20px;"></span>
+        </a>
 
-    <!-- Menu kanan -->
-    <div class="collapse navbar-collapse justify-content-end" id="mainNav">
-      <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="../home/index.php#home">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../product/index.php">Product</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../home/index.php#team">Team</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../home/index.php#contact">Contact</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+        <!-- Toggle button (mobile) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu kanan -->
+        <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="../home/index.php#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../product/index.php#product">Product</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../home/index.php#team">Team</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../home/index.php#contact">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
 
 
